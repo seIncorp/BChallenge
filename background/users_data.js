@@ -37,7 +37,18 @@ exports.someRandomPhotosThumbnailsAlbum = function(albumId){
 };
 
 exports.getAllU = function(){
-    return users;
+
+    let tempUsers = [];
+
+    users.forEach(element => {
+        tempUsers.push({
+            user: element,
+            thumbnail: exports.firstRandomPhotoThumbnailUser(element.id)
+        });
+    });
+
+
+    return tempUsers;
 };
 
 exports.getAlbumsByUser = function(userId)

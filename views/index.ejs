@@ -1,11 +1,34 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="/javascripts/framework.js"></script>
+    <script type="text/javascript" src="/javascripts/functions.js"></script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body onload="users()">
+  
+      <div class="header">
+          <h1><%= title %></h1>
+      </div>
+
+      <div id="breadcrumbs" class="navbar">
+        <label onclick="users()">users</label>
+      </div>
+
+      <div class="row">
+          <div id="navigation" class="side">
+            <label onclick="users()">Users</label>
+          </div>
+          <div id="main" class="main">
+            Loading...
+          </div>
+      </div>
+
+      <div class="footer" style="display:none;">
+          <h2>Footer</h2>
+      </div>
   </body>
 </html>

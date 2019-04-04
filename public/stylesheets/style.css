@@ -1,8 +1,44 @@
 body {
-  padding: 50px;
+  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.header {
+  padding: 10px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  background-color: #333;
+  color: white;
+}
+
+.row {  
+  display: flex;
+  flex-direction: initial;
+}
+
+.side {
+  flex: 20%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+.main {
+  flex: 80%;
+  background-color: white;
+  padding: 20px;
+}
+
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
 }
