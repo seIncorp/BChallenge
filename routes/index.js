@@ -6,35 +6,36 @@ let UsersData = require('../background/users_data');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'BChalleng' });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ONLY FOR TEST (DELETE BEFORE PUSH)
-router.get('/getAll',function(req, res, next) {
+router.post('/users', function(req, res, next) {
   res.status(200).json({
-    users: UsersData.getAllU(),
-    albums: UsersData.getAllA(),
-    photos: UsersData.getAllP()
+    status: 'true',
+    data: UsersData.getAllU()
   });
 });
 
-router.get('/getRandom',function(req, res, next) {
+router.post('/albums', function(req, res, next) {
   res.status(200).json({
-    photo: UsersData.firstRandomPhotoUser(1)
+    status: 'true',
+    data: UsersData.getAlbumsByUser(req.body.userId)
   });
 });
+
+router.post('/photos', function(req, res, next) {
+  res.status(200).json({
+    status: 'true',
+    data: UsersData.getPhotosByAlbum(req.body.albumId)
+  });
+});
+
+
+
+
+
+
+
+
 
 module.exports = router;

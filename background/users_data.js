@@ -16,7 +16,7 @@ exports.addPhoto = function(obj){
     photos.push(obj);
 };
 
-exports.firstRandomPhotoUser = function(userId)
+exports.firstRandomPhotoThumbnailUser = function(userId)
 {
     let tempAlbum = albums.filter(result => result.userId == userId)[0].id;
 
@@ -25,18 +25,39 @@ exports.firstRandomPhotoUser = function(userId)
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+exports.someRandomPhotosThumbnailsAlbum = function(albumId){
+    let arrPhotos = photos.filter(result => result.albumId == albumId);
 
+    let numberOfPhotos = 3;
+    let tempRandom = [];
+    for(let i = 0; i< numberOfPhotos; i++)
+        tempRandom.push(arrPhotos[Math.floor(Math.random() * arrPhotos.length)]);
+    
+    return tempRandom;
+};
 
-
-// ONLY FOR TEST (DELETE BEFORE PUSH)
 exports.getAllU = function(){
     return users;
 };
 
-exports.getAllA = function(){
-    return albums;
-};
+exports.getAlbumsByUser = function(userId)
+{
+    let temp = albums.filter(result => result.userId == Number(userId))
+    let arrayAlbums = [];
 
-exports.getAllP = function(){
-    return photos;
-};
+    temp.forEach(element => {
+        arrayAlbums.push({
+            album: element,
+            thumbnails: exports.someRandomPhotosThumbnailsAlbum(element.id)
+        });
+    });
+
+    return arrayAlbums;
+}
+
+exports.getPhotosByAlbum = function(albumId){
+    let arrPhotos = photos.filter(result => result.albumId == albumId);
+
+    return arrPhotos;
+}
+
