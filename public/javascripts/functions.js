@@ -1,3 +1,5 @@
+let tempuser = {};
+let tempalbums = {};
 
 
 function users(){
@@ -11,18 +13,21 @@ function users(){
 
 function *usersCall(){
 
-	let res1 = yield request({
+	let res = yield request({
 		type: 'POST', 
 		url: '/users', 
 		dataR: JSON.stringify({})
 	});
 
-	res1.then( obj => {
+	res.then( obj => {
         console.log(obj)
 
         if(obj.status == 'true')
         {
             document.getElementById('main').innerHTML = '';
+            tempuser = {};
+
+            document.getElementById('breadcrumbs').innerHTML = `<label id="1" onclick="users()">users</label>`;
 
             framework.create('table','usersTable')
             .append('main');
@@ -38,19 +43,13 @@ function *usersCall(){
                 framework.create('th').body('Photo').element()
             )
             .append('usersTable');
-            
-            function modifyText(e)
-                {
-                    console.log(e.user.username);
-                }
-
 
             obj.data.forEach(element => {
-                console.log(element);
 
-                
-
-                framework.create('tr').event("click", function(){modifyText(element)})
+                framework.create('tr')
+                .event("click", function(){
+                    albums(element);
+                })
                 .body(
                     framework.create('td').body(element.user.username).element()
                 )
@@ -67,6 +66,80 @@ function *usersCall(){
         }
 	}).catch(err => console.log(err));
 }
+
+function albums(element){
+
+    tempuser = element;
+
+	let it;
+	let value;
+
+    it = albumsCall(element.user.id);
+    value = it.next().value;
+    it.next(value);
+}
+
+function *albumsCall(userId){
+
+	let res = yield request({
+		type: 'POST', 
+		url: '/albums', 
+		dataR: JSON.stringify({
+            userId: userId
+        })
+    });
+    
+    res.then( obj => {
+        console.log(obj)
+
+        if(obj.status == 'true')
+        {
+            framework.create('label').body(`&nbsp;> ${tempuser.user.username}`).append('breadcrumbs');
+
+            document.getElementById('main').innerHTML = '';
+
+            framework.create('table','albumsTable')
+            .append('main');
+
+            framework.create('tr')
+            .body(
+                framework.create('th').body('Title').element()
+            )
+            .body(
+                framework.create('th').body('Thumbnails').element()
+            )
+            .append('albumsTable');
+
+            obj.data.forEach(element => {
+                console.log(element);
+
+                let tempThumbnails = '';
+
+                element.thumbnails.forEach(el => {
+                    tempThumbnails += `<img src="${el.thumbnailUrl}" height="75" width="75">`
+                });
+
+                framework.create('tr')
+                .event("click", function(){
+                    photos(element.album.id);
+                })
+                .body(
+                    framework.create('td').body(element.album.title).element()
+                )
+                .body(
+                    framework.create('td').body(tempThumbnails).element()
+                )
+                .append('albumsTable');
+            });
+        }
+    });
+}
+
+function photos(a){
+
+   console.log('PPPPPPPPPP',a);
+}
+
 
 
 
