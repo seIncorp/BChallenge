@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-
-
+let upload = require('./background/load');
+let UsersData = require('./background/users_data');
 
 
 
@@ -46,6 +46,27 @@ app.use((req,res,next)=> {
 
 
 
+
+// uploading users and users data
+upload.getUsers().then((result) => {
+  result.forEach(element => {
+    UsersData.addUser(element);
+  });
+
+  
+});
+
+upload.getAlbums().then(result => {
+  result.forEach(element => {
+    UsersData.addAlbum(element);
+  });
+});
+
+upload.getPhotos().then(result => {
+  result.forEach(element => {
+    UsersData.addPhoto(element);
+  });
+});
 
 
 
