@@ -1,6 +1,6 @@
 let tempuser = {};
 let tempalbum = {};
-
+let tempPhotos = {};
 
 function users(){
 	let it;
@@ -26,6 +26,8 @@ function *usersCall(){
         {
             document.getElementById('main').innerHTML = '';
             tempuser = {};
+            tempalbum = {};
+            tempPhotos = {};
 
             document.getElementById('breadcrumbs').innerHTML = `<label id="1" onclick="users()">users</label>`;
 
@@ -94,7 +96,9 @@ function *albumsCall(userId){
 
         if(obj.status == 'true')
         {
-            
+            tempalbum = {};
+            tempPhotos = {};
+
             document.getElementById('breadcrumbs').innerHTML = `<label id="1" onclick="users()">users</label>`;
             framework.create('label','2').body(`&nbsp;> ${tempuser.user.username}`).append('breadcrumbs');
 
@@ -164,6 +168,10 @@ function *photosCall(albumId){
 
         if(obj.status == 'true')
         {
+            tempPhotos = obj.data;
+
+            document.getElementById('breadcrumbs').innerHTML = `<label id="1" onclick="users()">users</label>`;
+            framework.create('label','2').body(`&nbsp;> ${tempuser.user.username}`).append('breadcrumbs');
             framework.create('label','3').body(`&nbsp;> ${tempalbum.album.title}`).append('breadcrumbs');
             
             document.getElementById('2').onclick = function(){
@@ -178,38 +186,99 @@ function *photosCall(albumId){
                     display: 'inline-flex',
                     position: 'relative'
                 })
-                .body(`<img id="${element.id+'img'}" src="${element.thumbnailUrl}" style="position:relative;">`)
+                .body(`<img id="${element.id+'img'}" src="${element.thumbnailUrl}" style="position:relative;" onclick="openImage('${element.id}')">`)
                 .append('main');
 
                  framework.create('div')
-                .style({
-                    'justify-content': 'center',
-                    'align-items': 'center',
-                    display: 'flex',
-                    position: 'absolute',
-                    bottom: '0',
-                    left: '0',
-                    right: '0',
-                    width: '150px',
-                    'text-align': 'center'
-                })
-                .body(element.id+element.title)
+                .class('imageTitle')
+                .body(element.title)
                 .append(`img${element.id}`);
             });
         }
     });
 }
 
+function openImage(id)
+{
+    let element = tempPhotos.filter(ee => ee.id == id)[0];
 
+    let body = document.body;
+    
+    framework.create('iframe','iframe')
+    .style({
+        position: 'absolute',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        top: '0',
+        width: '100%',
+        height: body.offsetHeight+'px',
+        'z-index': '1000',
+        'background-color': 'black',
+        opacity: '0.4'
+    })
+    .append('body');
 
+    framework.create('div','fullImage').style({
+        'z-index': '1001',
+        position: 'absolute',
+        top: '100px',
+        left: '100px'
+    })
+    .body(`<img src="${element.url}" onclick="showHideDetails('detailsView')">`)
+    .body(
 
+        framework.create('div')
+        .body(
+            framework.create('label')
+            .style({
+                position: 'absolute',
+                bottom: '1%',
+                left: '1%',
+                'background-color': 'white',
+                opacity: '0.6'
+            })
+            .body(element.title)
+            .element()
+        )
+        .body(
+            `
+                <div id="detailsView" class="detailsImage">
+                    <label>Image title: ${element.title}</label><br>
+                    <label>Album title: ${tempalbum.album.title}</label><br>
+                    <label>User name: ${tempuser.user.name}</label>
+                </div>
+            
+                <button onclick="closeImage()" class="closeButton">Close</button>
+            `
+        )
+        .element()
+    )
+    .append('body');
+}
 
+function closeImage()
+{
+    let elem1 = document.getElementById('iframe');
+    elem1.parentNode.removeChild(elem1);
 
+    let elem2 = document.getElementById('fullImage');
+    elem2.parentNode.removeChild(elem2);
+}
 
+function showHideDetails()
+{
+    let elem = document.getElementById('detailsView');
+
+    if(elem.style.display == 'none')
+        elem.style.display = 'block';
+    else
+        elem.style.display = 'none';
+}
 
 function request({type, url, dataR=''}){
 	return new Promise((resolve, reject)=>{
-		var xhttp = new XMLHttpRequest();
+		let xhttp = new XMLHttpRequest();
 		
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) 
@@ -217,8 +286,6 @@ function request({type, url, dataR=''}){
                 let obj = JSON.parse(this.responseText);
 				resolve(obj);
 			}
-		
-			// TODO: dodaj še za reject. ali to prepusti naslednjim funkcijam?
 		};
 		
 		xhttp.open(type, url,true);

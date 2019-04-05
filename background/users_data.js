@@ -1,5 +1,3 @@
-
-
 let users = [];
 let albums = [];
 let photos = [];
@@ -19,7 +17,6 @@ exports.addPhoto = function(obj){
 exports.firstRandomPhotoThumbnailUser = function(userId)
 {
     let tempAlbum = albums.filter(result => result.userId == userId)[0].id;
-
     let arr = photos.filter(result => result.albumId == tempAlbum);
 
     return arr[Math.floor(Math.random() * arr.length)];
@@ -27,17 +24,15 @@ exports.firstRandomPhotoThumbnailUser = function(userId)
 
 exports.someRandomPhotosThumbnailsAlbum = function(albumId){
     let arrPhotos = photos.filter(result => result.albumId == albumId);
-
-    let numberOfPhotos = 3;
     let tempRandom = [];
-    for(let i = 0; i< numberOfPhotos; i++)
+
+    for(let i = 0; i< 3; i++)
         tempRandom.push(arrPhotos[Math.floor(Math.random() * arrPhotos.length)]);
     
     return tempRandom;
 };
 
 exports.getAllU = function(){
-
     let tempUsers = [];
 
     users.forEach(element => {
@@ -46,7 +41,6 @@ exports.getAllU = function(){
             thumbnail: exports.firstRandomPhotoThumbnailUser(element.id)
         });
     });
-
 
     return tempUsers;
 };

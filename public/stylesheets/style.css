@@ -43,3 +43,32 @@ a {
   text-align: center;
   background: #ddd;
 }
+
+.imageTitle {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 150px;
+  text-align: center;
+  background-color: white;
+  opacity: 0.6;
+}
+
+.detailsImage {
+  display: block; 
+  position: absolute; 
+  left: 30%; 
+  bottom: 10%;
+  background-color: white; 
+  opacity: 0.6;
+}
+
+.closeButton {
+  position: absolute; 
+  right: 1%; 
+  bottom: 1%;
+}

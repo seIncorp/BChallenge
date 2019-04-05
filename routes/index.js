@@ -1,10 +1,8 @@
 var express = require('express');
 var router = express.Router();
-
 let UsersData = require('../background/users_data');
 
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'BChalleng' });
 });
@@ -29,13 +27,6 @@ router.post('/photos', function(req, res, next) {
     data: UsersData.getPhotosByAlbum(req.body.albumId)
   });
 });
-
-
-
-
-
-
-
 
 
 module.exports = router;
