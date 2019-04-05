@@ -173,11 +173,28 @@ function *photosCall(albumId){
             document.getElementById('main').innerHTML = '';
 
             obj.data.forEach((element,id) => {
-                document.getElementById('main').innerHTML += `<img id="${id+'img'}" src="${element.thumbnailUrl}" onclick="">`;
 
-                let bb = document.getElementById(`${id+'img'}`);
+                framework.create('div',`img${element.id}`).style({
+                    display: 'inline-flex',
+                    position: 'relative'
+                })
+                .body(`<img id="${element.id+'img'}" src="${element.thumbnailUrl}" style="position:relative;">`)
+                .append('main');
 
-                document.getElementById('main').innerHTML += `<label style="position: absolute;left: ${bb.offsetLeft+'px'};top: ${(bb.offsetTop+bb.height-20)+'px'};color: black;">aa</label>`;
+                 framework.create('div')
+                .style({
+                    'justify-content': 'center',
+                    'align-items': 'center',
+                    display: 'flex',
+                    position: 'absolute',
+                    bottom: '0',
+                    left: '0',
+                    right: '0',
+                    width: '150px',
+                    'text-align': 'center'
+                })
+                .body(element.id+element.title)
+                .append(`img${element.id}`);
             });
         }
     });
